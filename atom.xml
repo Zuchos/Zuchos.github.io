@@ -1,54 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE HTML>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Software development and much more...  | Zuchos.com</title>
+  <title><![CDATA[Zuchos.com]]></title>
+  <link href="http://zuchos.com/atom.xml" rel="self"/>
+  <link href="http://zuchos.com/"/>
+  <updated>2015-05-23T01:29:28+02:00</updated>
+  <id>http://zuchos.com/</id>
+  <author>
+    <name><![CDATA[Łukasz Żuchowski]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
-	<meta name="author" content="Łukasz Żuchowski"> 
-	
-	<meta name="description" content="Recently I started using akka-http and what I was trying to achive was to receive data from request, send response that the data were recieved &hellip;"> <meta name="keywords" content="">
-
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-	<link href="/atom.xml" rel="alternate" title="Zuchos.com" type="application/atom+xml">
-	<link rel="canonical" href="">
-	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
-	
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	
-</head>
-
-
-
-<body>
-	<header id="header" class="inner"><h1>Zuchos.com</h1>
-<nav id="main-nav" style=""><ul>
-	<li><a href="/">Blog</a></li>
-	<li><a href="/archives">Archive</a></li>
-	<li><a href="/contact">Contact</a></li>
-</ul>
-</nav>
-
-
-<div>
-    <img src="images/baner.png" style="display: block;    margin-left: auto;    margin-right: auto;margin-top: 10px"/>
-    <p style="text-align: center;font-size: 16px;margin-top: 10px"> Blog of Łukasz Żuchowski</p>
-</div></header>
-
-	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/05/23/how-to-write-subscriber-for-akka-streams/">
-		
-			How to Write Subscriber for Akka-streams?</a>
-	</h2>
-	<div class="entry-content">
-		<p>Recently I started using <em>akka-http</em> and what I was trying to achive was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
+  
+  <entry>
+    <title type="html"><![CDATA[How to write subscriber for akka-streams?]]></title>
+    <link href="http://zuchos.com/blog/2015/05/23/how-to-write-subscriber-for-akka-streams/"/>
+    <updated>2015-05-23T00:05:10+02:00</updated>
+    <id>http://zuchos.com/blog/2015/05/23/how-to-write-subscriber-for-akka-streams</id>
+    <content type="html"><![CDATA[<p>Recently I started using <em>akka-http</em> and what I was trying to achive was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
 
 <pre><code>trait SimpleService {
 
@@ -150,41 +120,7 @@ Source(dataPublisher)
 </code></pre>
 
 <p>Now you application is ready to process data incoming data with akka-streams. You may find complete example on <a href="https://github.com/Zuchos/akka-http-with-steams">github</a></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
+]]></content>
+  </entry>
   
-
-
-
-<time datetime="2015-05-23T00:05:10+02:00" pubdate data-updated="true">May 23rd, 2015</time></div>
-	
-
-
-</div>
-</article>
-
-
-</div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
- Łukasz Żuchowski 
-<br>
-Powered by Octopress.
-</footer>
-	
-
-</body>
-</html>
+</feed>
