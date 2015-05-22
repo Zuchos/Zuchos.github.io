@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Zuchos.com]]></title>
-  <link href="http://zuchos.com/atom.xml" rel="self"/>
-  <link href="http://zuchos.com/"/>
-  <updated>2015-05-23T01:29:28+02:00</updated>
-  <id>http://zuchos.com/</id>
+  <link href="http://zuchos.github.io/atom.xml" rel="self"/>
+  <link href="http://zuchos.github.io/"/>
+  <updated>2015-05-23T01:48:09+02:00</updated>
+  <id>http://zuchos.github.io/</id>
   <author>
     <name><![CDATA[Łukasz Żuchowski]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[How to write subscriber for akka-streams?]]></title>
-    <link href="http://zuchos.com/blog/2015/05/23/how-to-write-subscriber-for-akka-streams/"/>
+    <link href="http://zuchos.github.io/blog/2015/05/23/how-to-write-subscriber-for-akka-streams/"/>
     <updated>2015-05-23T00:05:10+02:00</updated>
-    <id>http://zuchos.com/blog/2015/05/23/how-to-write-subscriber-for-akka-streams</id>
+    <id>http://zuchos.github.io/blog/2015/05/23/how-to-write-subscriber-for-akka-streams</id>
     <content type="html"><![CDATA[<p>Recently I started using <em>akka-http</em> and what I was trying to achive was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
 
 <pre><code>trait SimpleService {
