@@ -25,7 +25,7 @@ TDD gives me flexibility to change my code anytime and I know that it will work 
 
 So if you don't want to end up like mammoth or dinosaurs, be adaptive! I think that the reason why nowadays start-ups and small innovative companies are so successful. They are adaptive!
 
-[![](http://4.bp.blogspot.com/-nciUfstyjSk/UqoclTB4MXI/AAAAAAAAFlA/O0cTWMiPay0/s320/mamooth.jpg)](http://4.bp.blogspot.com/-nciUfstyjSk/UqoclTB4MXI/AAAAAAAAFlA/O0cTWMiPay0/s1600/mamooth.jpg)
+{% img centered /images/posts/2013/mamooth.jpg Mamooth %}
 
 <!--more-->
 
@@ -33,25 +33,25 @@ So if you don't want to end up like mammoth or dinosaurs, be adaptive! I think t
 
 But not to get from one buzzword to another, what is my definition of being adaptive. I believe that there is a philosophy behind it. I come to terms with fact that I'm not able to plan and control everything (believe me, that it took me a while). Maybe for some of you it's obvious, but I'm programmer. When I write println("hello world"), the text is printed out. Moreover in the real world I am expected to make promises and fulfill them (those are named estimates, plans, sprint backlogs etc). So sometimes I may have illusion that I'm in control. That means that: I may think long enough and come up with solution or plan that will work! And will always work… cause it's smart and made well.
 
-[![](http://3.bp.blogspot.com/-1SAJ4794x50/Uqodkrt9lFI/AAAAAAAAFlI/hA3tIldUJTc/s320/Agile_Bingo__Random__.png)](http://3.bp.blogspot.com/-1SAJ4794x50/Uqodkrt9lFI/AAAAAAAAFlI/hA3tIldUJTc/s1600/Agile_Bingo__Random__.png)
+{% img centered /images/posts/2013/bingo.png Bingo %}
 
 #### And here comes Agile…
 
 There is no a such thing as perfect plan, solution or even estimate. Some things are better than the other, but usually you don't know how good they are until you try. The solution is to start with something small, try it out and then change. Repeat that cycle forever (I call it: try-change cycle). There is always temptation to spend more time on planning and invent a perfect solution. But in my opinion it's better to spend that time on trying out. The other problem is that, in big organizations to change something you must have well-documented-bullet-proof plan and blessings from the CEO or managers. That's the reason why such organizations are almost incapable to change. So if you are working in such organization remember: it's much better to change one team (call it pilot project) immediately than spend a year to make a plan that will change organization. If your team will be successful it would be much easier to spread the change. On the other hand, if your first solution will fail you may easily change it (remember, be adaptive!).
 
-[![](http://2.bp.blogspot.com/-J8J_lPJVttM/Uqod8DSlZAI/AAAAAAAAFlQ/xq1_TrMY7VU/s320/wiew.jpg)](http://2.bp.blogspot.com/-J8J_lPJVttM/Uqod8DSlZAI/AAAAAAAAFlQ/xq1_TrMY7VU/s1600/wiew.jpg)
+{% img centered /images/posts/2013/squirel.jpg Squirrel %}
 
 #### Agile is direction not destination
 
 Bottom line is, be adaptive, prefer try-change cycle over thinking on master plan. Always start with something small, try it out (as it is) and then if it doesn't work well enough, change it. Remember! You are never _there_, something that may work today but tomorrow world will change. You should never-ever end try-change cycle. That's my definition of agile and anyone could be agile: student, developer, programer, CEO, housewife, literally anybody. I tried to be agile in my personal life and no surprise here, it works!
 
-[![](http://3.bp.blogspot.com/-ZOcUHUdMM6w/UqoeM2XvvDI/AAAAAAAAFlY/q1WjAkkWUmY/s320/5112748410_8a4388cc8e_z.jpg)](http://3.bp.blogspot.com/-ZOcUHUdMM6w/UqoeM2XvvDI/AAAAAAAAFlY/q1WjAkkWUmY/s1600/5112748410_8a4388cc8e_z.jpg)
+{% img centered /images/posts/2013/view.jpg View %}
 
 #### Beware
 
 Beware you will meet salesmen that will tell you that there is a magic pill called Scrum or whatever. You just buy it or make a certificate and you are agile! Just like that! If you believe them, it means that you are not agile enough. I don't say that making certificates or training doesn't make sense, just remember that those are just tools to become agile, not the agile itself.
 
-[![](http://2.bp.blogspot.com/-nO3DvEqoTbA/UqoeZWzNaMI/AAAAAAAAFlg/m9VZD7WgAFU/s320/bees.jpg)](http://2.bp.blogspot.com/-nO3DvEqoTbA/UqoeZWzNaMI/AAAAAAAAFlg/m9VZD7WgAFU/s1600/bees.jpg)</td>
+{% img centered /images/posts/2013/bees.jpg Beware bees %}
 
 
 #### Disclaimer

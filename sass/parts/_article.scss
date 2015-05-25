@@ -1,6 +1,13 @@
 article {
-  padding: 0 0 0 0;
+  padding: 0 0 60px 0;
   position: relative;
+
+  img.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   @media screen and (max-width: 620px) {
     padding-bottom: 15px;
   }
@@ -112,9 +119,6 @@ article {
       -moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.35);
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.35);
       border-bottom: 0px;
-      display: block;    
-      margin-left: auto;    
-      margin-right: auto;
     }
 
     blockquote {
