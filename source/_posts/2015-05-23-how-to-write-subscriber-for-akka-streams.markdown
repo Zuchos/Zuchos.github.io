@@ -34,6 +34,7 @@ Recently I started using *akka-http* and what I was trying to achive was to rece
  
 	}
 	
+<!--more-->
 Now we want to add new route that will accept data from sender. For this purpose we are going to add new route to the defined routes.
 
 	path("hello") {
