@@ -3,7 +3,7 @@ layout: post
 title: "How to write subscriber for akka-streams?"
 date: 2015-05-23 00:05:10 +0200
 comments: true
-categories: 
+categories: conference
 ---
 Recently I started using *akka-http* and what I was trying to achive was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty *akka-http* service:
 
