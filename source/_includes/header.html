@@ -1,9 +1,11 @@
-<h1>{{ site.title }}</h1>
+<a href="{{ root_url }}"><h1>{{ site.title }}</h1></a>
 <nav id="main-nav" style="">{% include navigation.html %}</nav>
 
 {% include custom/header.html %}
-<!--TODO Make it better-->
-<div>
-    <img src="/images/baner.png" style="display: block;    margin-left: auto;    margin-right: auto;margin-top: 10px"/>
-    <p style="text-align: center;font-size: 16px;margin-top: 10px"> Blog of Łukasz Żuchowski</p>
+
+<div id="baner">
+    <a href="{{ root_url }}">
+        <img src="/images/baner.png"/>
+        <p> Blog of Łukasz Żuchowski</p>
+    </a>
 </div>
