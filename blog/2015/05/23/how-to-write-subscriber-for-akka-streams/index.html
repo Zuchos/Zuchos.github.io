@@ -39,7 +39,7 @@
 </div></header>
 
 	<div id="content" class="inner"><article class="post">
-	<h2 class="title">How to Write Subscriber for Akka-streams?</h2>
+	<h2 class="title">How to write subscriber for akka-streams?</h2>
 	<div class="entry-content"><p>Recently I started using <em>akka-http</em> and what I was trying to achive was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
 
 <pre><code>trait SimpleService {
@@ -69,6 +69,9 @@ object NaiveGsServer extends App with SimpleService {
 
 }
 </code></pre>
+
+<!--more-->
+
 
 <p>Now we want to add new route that will accept data from sender. For this purpose we are going to add new route to the defined routes.</p>
 
@@ -165,14 +168,56 @@ Source(dataPublisher)
 
 </div>
 </article>
+<span class="post_end">
+    <br/>
+	  
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Łukasz Żuchowski</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2015-05-23T00:05:10+02:00" pubdate data-updated="true">May 23rd, 2015</time>
+	  <span class="categories">
+
+</span>
+</span>
+
+
+<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+		
+		<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+		
+		<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
 
 
 <section id="comment">
-    <h1 class="title">Comments</h1>
+    <h2 class="title">Comments</h2>
     <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
 </section>
-
 </div>
 	<footer id="footer" class="inner">Copyright &copy; 2015
  Łukasz Żuchowski 
@@ -180,6 +225,58 @@ Source(dataPublisher)
 Powered by Octopress.
 </footer>
 	
+
+<script type="text/javascript">
+      var disqus_shortname = 'zuchos';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://zuchos.github.io/blog/2015/05/23/how-to-write-subscriber-for-akka-streams/';
+        var disqus_url = 'http://zuchos.github.io/blog/2015/05/23/how-to-write-subscriber-for-akka-streams/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
 
 </body>
 </html>

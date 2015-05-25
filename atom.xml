@@ -4,7 +4,7 @@
   <title><![CDATA[Zuchos.com]]></title>
   <link href="http://zuchos.github.io/atom.xml" rel="self"/>
   <link href="http://zuchos.github.io/"/>
-  <updated>2015-05-25T09:44:06+02:00</updated>
+  <updated>2015-05-25T15:09:05+02:00</updated>
   <id>http://zuchos.github.io/</id>
   <author>
     <name><![CDATA[Łukasz Żuchowski]]></name>
@@ -47,6 +47,9 @@ object NaiveGsServer extends App with SimpleService {
 
 }
 </code></pre>
+
+<!--more-->
+
 
 <p>Now we want to add new route that will accept data from sender. For this purpose we are going to add new route to the defined routes.</p>
 

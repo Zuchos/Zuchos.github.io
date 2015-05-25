@@ -46,7 +46,7 @@
 		
 		<a href="/blog/2015/05/23/how-to-write-subscriber-for-akka-streams/">
 		
-			How to Write Subscriber for Akka-streams?</a>
+			How to write subscriber for akka-streams?</a>
 	</h2>
 	<div class="entry-content">
 		<p>Recently I started using <em>akka-http</em> and what I was trying to achive was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
@@ -79,81 +79,9 @@ object NaiveGsServer extends App with SimpleService {
 }
 </code></pre>
 
-<p>Now we want to add new route that will accept data from sender. For this purpose we are going to add new route to the defined routes.</p>
-
-<pre><code>path("hello") {
-  get {
-    complete("Hello World!")
-}
-}
-path("data") {
-  (post &amp; entity(as[String]) &amp; parameter('sender.as[String])) {
-    (dataAsString, sender: String) =&gt;
-      complete {
-        HttpResponse(StatusCodes.OK, entity = "Data received")
-      }
-  }
-}
-</code></pre>
-
-<p>What is now missing is the Publiser that will publish data that came from http request into the akka-stream. To do that we need to define <code>DataPublisher</code>. <code>DataPublisher</code> will be an implementation of <code>ActorPublisher</code> trait. It will be receiving data and then it will be publishing those to the next element in the flow.</p>
-
-<pre><code>case class Data(sender: Option[String], body: String)
-
-class DataPublisher extends ActorPublisher[Data] {
-  var queue: mutable.Queue[Data] = mutable.Queue()
-
-  override def receive: Actor.Receive = {
-    case Publish(s) =&gt; queue.enqueue(s)
-      publishIfNeeded()
-    case Request(cnt) =&gt;
-      publishIfNeeded()
-    case Cancel =&gt; context.stop(self)
-    case _ =&gt;
-  }
-
-  def publishIfNeeded() = {
-    while (queue.nonEmpty &amp;&amp; isActive &amp;&amp; totalDemand &gt; 0) {
-      onNext(queue.dequeue())
-    }
-  }
-}
-
-object DataPublisher {
-  case class Publish(data: Data)
-}
-</code></pre>
-
-<p>As you may see, the main method is the receive method which is responsible for accepting the incoming data and responding on demand on data that is comming from subscribers.
-The last thing to implement is to define the processing flow:</p>
-
-<pre><code>val dataPublisherRef = system.actorOf(Props[DataPublisher])
-val dataPublisher = ActorPublisher[Data](dataPublisher)
-
-Source(dataPublisher)
-  .runForeach(
-    (x: Data) =&gt;
-      println(s"Data from ${x.sender} are being processed: ${x.body}")
-  )
-  .onComplete(_ =&gt; system.shutdown())
-</code></pre>
-
-<p>and then publish the incoming data:</p>
-
-<pre><code>path("data") {
-  (post &amp; entity(as[String]) &amp; parameter('sender.as[String])) {
-    (dataAsString, sender: String) =&gt;
-      complete {
-        dataPublisherRef ! Data(sender, dataAsString)
-        HttpResponse(StatusCodes.OK, entity = "Data received")
-      }
-  }
-</code></pre>
-
-<p>Now you application is ready to process data incoming data with akka-streams. You may find complete example on <a href="https://github.com/Zuchos/akka-http-with-steams">github</a></p>
 
 		
-		
+		<a href="/blog/2015/05/23/how-to-write-subscriber-for-akka-streams/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -186,6 +114,55 @@ Source(dataPublisher)
 Powered by Octopress.
 </footer>
 	
+
+<script type="text/javascript">
+      var disqus_shortname = 'zuchos';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
 
 </body>
 </html>
