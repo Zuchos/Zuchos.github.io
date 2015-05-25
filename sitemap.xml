@@ -5,6 +5,14 @@
     <lastmod>2015-05-23T00:05:10+02:00</lastmod>
   </url>
   <url>
+    <loc>http://zuchos.github.io/blog/2014/07/06/confitura-2014-developers-family-reunion/</loc>
+    <lastmod>2014-07-06T10:00:00+02:00</lastmod>
+  </url>
+  <url>
+    <loc>http://zuchos.github.io/blog/2013/12/16/what-does-agile-mean-to-you/</loc>
+    <lastmod>2013-12-16T09:49:04+01:00</lastmod>
+  </url>
+  <url>
     <loc>http://zuchos.github.io/archives/</loc>
   </url>
   <url>
@@ -15,5 +23,23 @@
   </url>
   <url>
     <loc>http://zuchos.github.io/</loc>
+  </url>
+  <url>
+    <loc>http://zuchos.github.io/blog/categories/agile/</loc>
+  </url>
+  <url>
+    <loc>http://zuchos.github.io/blog/categories/scrum/</loc>
+  </url>
+  <url>
+    <loc>http://zuchos.github.io/blog/categories/scala/</loc>
+  </url>
+  <url>
+    <loc>http://zuchos.github.io/blog/categories/akka/</loc>
+  </url>
+  <url>
+    <loc>http://zuchos.github.io/blog/categories/akka-http/</loc>
+  </url>
+  <url>
+    <loc>http://zuchos.github.io/blog/categories/conference/</loc>
   </url>
 </urlset>

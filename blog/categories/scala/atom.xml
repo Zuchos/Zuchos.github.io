@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: scala | Zuchos.com]]></title>
+  <link href="http://zuchos.github.io/blog/categories/scala/atom.xml" rel="self"/>
+  <link href="http://zuchos.github.io/"/>
+  <updated>2015-05-25T16:23:57+02:00</updated>
+  <id>http://zuchos.github.io/</id>
+  <author>
+    <name><![CDATA[Łukasz Żuchowski]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Confitura 2014 - Developers family reunion]]></title>
+    <link href="http://zuchos.github.io/blog/2014/07/06/confitura-2014-developers-family-reunion/"/>
+    <updated>2014-07-06T10:00:00+02:00</updated>
+    <id>http://zuchos.github.io/blog/2014/07/06/confitura-2014-developers-family-reunion</id>
+    <content type="html"><![CDATA[<p>I like this time of the year. Summers just begins, it&rsquo;s nice and warm outside the sun is shining and my favorite community conference takes place. Confitura is very close to my heart. I had a pleasure to participate in the organization in the past. But this year I was on the other side, a speaker. I was a bit curious how community will react on the topic of my speech (&ldquo;How to be a happy Developer?&rdquo;)? Would it catch attention and fill the room? It was a &ldquo;soft&rdquo; presentation after all.</p>
+
+<!--more-->
+
+
+<p>But my doubts vanished in the air of full venue and were definitely gone afterwards when the applause rang out. Thank you for attending to my presentation, it was a pleasure to share my insights about carrier with you. For those who chose the other session, no worries, you will still be able to watch it. Just wait a bit and follow ConfituraPL on Twitter or Facebook (the video should be available on youtube).</p>
+
+<p>One of the insight on my presentation was that &ldquo;the most important are the people around you&rdquo; and that&rsquo;s the thing that I love about Confitura. Each year I have a great opportunity to meet lot&rsquo;s of people. Those that I met during studies, my past jobs, community leaders and conference veterans. It&rsquo;s like family reunion. I haven&rsquo;t seen many of those guys for a long time and sometimes we haven’t heard from each other for a while, but during Confitura we talk together, gossip or joke like it was yesterday. Besides that I met lot&rsquo;s of new people too, I hope we will see each other next year (or maybe during WarsJava?).</p>
+
+<p>Kudos for organizers and volunteers, job well done. That was great developers family reunion!</p>
+]]></content>
+  </entry>
+  
+</feed>
