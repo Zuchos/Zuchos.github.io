@@ -23,7 +23,7 @@
 
 
 <body>
-	<header id="header" class="inner"><h1>Zuchos.com</h1>
+	<header id="header" class="inner"><a href="/"><h1>Zuchos.com</h1></a>
 <nav id="main-nav" style=""><ul>
 	<li><a href="/">Blog</a></li>
 	<li><a href="/archives">Archive</a></li>
@@ -32,10 +32,12 @@
 </nav>
 
 
-<!--TODO Make it better-->
-<div>
-    <img src="/images/baner.png" style="display: block;    margin-left: auto;    margin-right: auto;margin-top: 10px"/>
-    <p style="text-align: center;font-size: 16px;margin-top: 10px"> Blog of Łukasz Żuchowski</p>
+
+<div id="baner">
+    <a href="/">
+        <img src="/images/baner.png"/>
+        <p> Blog of Łukasz Żuchowski</p>
+    </a>
 </div></header>
 
 	<div id="content" class="inner">
@@ -51,33 +53,62 @@
 	<div class="entry-content">
 		<p>Recently I started using <em>akka-http</em> and what I was trying to achive was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
 
-<pre><code>trait SimpleService {
+<figure class='code'><figcaption><span>SimpleService</span><a href='https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>    <span class="k">trait</span> <span class="nc">SimpleService</span> <span class="o">{</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="k">implicit</span> <span class="k">val</span> <span class="n">system</span><span class="k">:</span> <span class="kt">ActorSystem</span>
+</span><span class='line'>    <span class="k">implicit</span> <span class="k">def</span> <span class="n">executor</span><span class="k">:</span> <span class="kt">ExecutionContextExecutor</span>
+</span><span class='line'>    <span class="k">implicit</span> <span class="k">val</span> <span class="n">materializer</span><span class="k">:</span> <span class="kt">FlowMaterializer</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="k">val</span> <span class="n">routes</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">path</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">get</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">complete</span><span class="o">(</span><span class="s">&quot;Hello World!&quot;</span><span class="o">)</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">object</span> <span class="nc">NaiveGsServer</span> <span class="k">extends</span> <span class="nc">App</span> <span class="k">with</span> <span class="nc">SimpleService</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">override</span> <span class="k">implicit</span> <span class="k">val</span> <span class="n">system</span> <span class="k">=</span> <span class="nc">ActorSystem</span><span class="o">()</span>
+</span><span class='line'>    <span class="k">override</span> <span class="k">implicit</span> <span class="k">val</span> <span class="n">executor</span> <span class="k">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dispatcher</span>
+</span><span class='line'>    <span class="k">override</span> <span class="k">implicit</span> <span class="k">val</span> <span class="n">materializer</span> <span class="k">=</span> <span class="nc">ActorFlowMaterializer</span><span class="o">()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">val</span> <span class="n">config</span> <span class="k">=</span> <span class="nc">ConfigFactory</span><span class="o">.</span><span class="n">load</span><span class="o">()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nc">Http</span><span class="o">().</span><span class="n">bindAndHandle</span><span class="o">(</span><span class="n">routes</span><span class="o">,</span> <span class="n">config</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">&quot;http.host&quot;</span><span class="o">),</span> <span class="n">config</span><span class="o">.</span><span class="n">getInt</span><span class="o">(</span><span class="s">&quot;http.port&quot;</span><span class="o">))</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-  implicit val system: ActorSystem
-  implicit def executor: ExecutionContextExecutor
-  implicit val materializer: FlowMaterializer
 
-  val routes = {
-    path("hello") {
-      get {
-        complete("Hello World!")
-      }
-    }
-  }
-}
 
-object NaiveGsServer extends App with SimpleService {
-
-  override implicit val system = ActorSystem()
-  override implicit val executor = system.dispatcher
-  override implicit val materializer = ActorFlowMaterializer()
-
-  val config = ConfigFactory.load()
-
-  Http().bindAndHandle(routes, config.getString("http.host"), config.getInt("http.port"))
-
-}
-</code></pre>
 
 
 		
@@ -246,36 +277,9 @@ Powered by Octopress.
 
 
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
 
 
 

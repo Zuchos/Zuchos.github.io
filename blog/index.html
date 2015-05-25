@@ -23,7 +23,7 @@
 
 
 <body>
-	<header id="header" class="inner"><h1>Zuchos.com</h1>
+	<header id="header" class="inner"><a href="/"><h1>Zuchos.com</h1></a>
 <nav id="main-nav" style=""><ul>
 	<li><a href="/">Blog</a></li>
 	<li><a href="/archives">Archive</a></li>
@@ -32,10 +32,12 @@
 </nav>
 
 
-<!--TODO Make it better-->
-<div>
-    <img src="/images/baner.png" style="display: block;    margin-left: auto;    margin-right: auto;margin-top: 10px"/>
-    <p style="text-align: center;font-size: 16px;margin-top: 10px"> Blog of Łukasz Żuchowski</p>
+
+<div id="baner">
+    <a href="/">
+        <img src="/images/baner.png"/>
+        <p> Blog of Łukasz Żuchowski</p>
+    </a>
 </div></header>
 
 	<div id="content" class="inner">
@@ -67,36 +69,9 @@ Powered by Octopress.
 
 
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
 
 
 
