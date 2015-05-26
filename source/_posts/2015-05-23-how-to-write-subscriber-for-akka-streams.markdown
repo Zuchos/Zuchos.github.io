@@ -38,7 +38,7 @@ Recently I started using *akka-http* and what I was trying to achieve was to rec
 {% endcodeblock %}
 
 <!--more-->
-Now we want to add new route that will accept data from sender. For this purpose we are going to add new route to the defined routes.
+Now we want to add new route that will accept data from sender. For this purpose we are going to add it to the routing definition.
 
 {% codeblock lang:scala routes https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
   val routes = {
@@ -59,7 +59,7 @@ Now we want to add new route that will accept data from sender. For this purpose
   }
 {% endcodeblock %}
 
-What is now missing is the Publiser that will publish data that came from http request into the akka-stream. To do that we need to define ```DataPublisher```. ```DataPublisher``` will be an implementation of ```ActorPublisher``` trait. It will be receiving data and then it will be publishing those to the next element in the flow.
+What is now missing is the Publisher that will publish data that came from http request into the akka-stream. To do that we need to define ```DataPublisher```. It will be an implementation of ```ActorPublisher``` trait. It will be receiving data and then it will be publishing those to the next element in the flow.
 
 {% codeblock lang:scala DataPublisher https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/actors/FramePublisher.scala %}
   case class Data(sender: Option[String], body: String)
@@ -88,8 +88,8 @@ What is now missing is the Publiser that will publish data that came from http r
   }
 {% endcodeblock %}	
 
-As you may see, the main method is the receive method which is responsible for accepting the incoming data and responding on demand on data that is comming from subscribers. 
-The last thing to implement is to define the processing flow:
+As you may see, the main method is ```receive()``` which is responsible for accepting the incoming data and responding on demand on data that is coming from subscribers.
+The last thing is to define the processing flow.
 
 {% codeblock lang:scala flow definition https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
   val dataPublisherRef = system.actorOf(Props[DataPublisher])
@@ -115,4 +115,4 @@ and then publish the incoming data:
     }
 {% endcodeblock %}
   
-Now you application is ready to process data incoming data with akka-streams. You may find complete example on [github](https://github.com/Zuchos/akka-http-with-steams)
+Now your application is ready to process incoming data with akka-streams. You may find complete example on [github](https://github.com/Zuchos/akka-http-with-steams)
