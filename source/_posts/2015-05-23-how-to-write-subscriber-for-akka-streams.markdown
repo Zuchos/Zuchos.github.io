@@ -5,7 +5,7 @@ date: 2015-05-23 00:05:10 +0200
 comments: true
 categories: conference
 ---
-Recently I started using *akka-http* and what I was trying to achive was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty *akka-http* service:
+Recently I started using *akka-http* and what I was trying to achieve was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty *akka-http* service:
 
 {% codeblock SimpleService lang:scala https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
 	trait SimpleService {
@@ -40,7 +40,6 @@ Recently I started using *akka-http* and what I was trying to achive was to rece
 Now we want to add new route that will accept data from sender. For this purpose we are going to add new route to the defined routes.
 
 {% codeblock lang:scala routes https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
-
 	path("hello") {
 	  get {
 	    complete("Hello World!")
@@ -55,7 +54,7 @@ Now we want to add new route that will accept data from sender. For this purpose
 	  }
 	}
 {% endcodeblock %}
-	
+
 What is now missing is the Publiser that will publish data that came from http request into the akka-stream. To do that we need to define ```DataPublisher```. ```DataPublisher``` will be an implementation of ```ActorPublisher``` trait. It will be receiving data and then it will be publishing those to the next element in the flow.
 
 {% codeblock lang:scala DataPublisher https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/actors/FramePublisher.scala %}
