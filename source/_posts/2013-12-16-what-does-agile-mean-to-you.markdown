@@ -3,7 +3,7 @@ layout: post
 title: "What does Agile mean to you?"
 date: 2013-12-16 10:49:04 +0200
 comments: true
-categories: Agile Scrum
+categories: [agile, scrum]
 ---
 
 Not so long time a go, I was on the conference about Agile ([AgileByExample](http://agilebyexample.com/) - great conference by the way) and one of the sponsors has a win-tablet contest. To win brand new Nexus you had to post on their facebook wall answer for a question:

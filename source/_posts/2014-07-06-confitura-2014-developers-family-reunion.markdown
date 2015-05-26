@@ -3,7 +3,7 @@ layout: post
 title: "Confitura 2014 - Developers family reunion"
 date: 2014-07-06 10:00:00 +0200
 comments: true
-categories: Scala akka akka-http
+categories: [conference, confitura]
 ---
 
 I like this time of the year. Summers just begins, it's nice and warm outside the sun is shining and my favorite community conference takes place. Confitura is very close to my heart. I had a pleasure to participate in the organization in the past. But this year I was on the other side, a speaker. I was a bit curious how community will react on the topic of my speech ("How to be a happy Developer?")? Would it catch attention and fill the room? It was a "soft" presentation after all.
