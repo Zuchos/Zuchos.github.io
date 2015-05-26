@@ -4,7 +4,7 @@
   <title><![CDATA[Category: codebrag | Zuchos.com]]></title>
   <link href="http://zuchos.github.io/blog/categories/codebrag/atom.xml" rel="self"/>
   <link href="http://zuchos.github.io/"/>
-  <updated>2015-05-26T17:23:24+02:00</updated>
+  <updated>2015-05-26T17:48:06+02:00</updated>
   <id>http://zuchos.github.io/</id>
   <author>
     <name><![CDATA[Łukasz Żuchowski]]></name>
@@ -22,20 +22,20 @@
 
 <p>During this journey we found many risks and traps that are waiting for a newcomer. That&rsquo;s what this post is all about, traps &amp; misconceptions on code review.</p>
 
-<p><img class="centered" src="/images/posts/2013/puppet.jpg"></p>
+<p>{% img centered /images/posts/2013/puppet.jpg %}</p>
 
 <p><strong>Code control:</strong> many organizations uses CR for controlling codebase. Most of them are using pre-commit strategy. In many cases its because those projects are open-source with hundred of commiters. In real life this is quite rare scenario, so if you hired someone it means that you trust him enough to let him commit code to repository. I know that in some organizations there will be temptation to make procedure that will force developers to &ldquo;review&rdquo; and &ldquo;approve&rdquo; every commit, but it will not guarantee the quality. Moreover people will soon treat code review as &ldquo;stupid&rdquo; corporate procedure and will try to hack-it (such changing password every month e.g. people are using passwords like: mypass1, mypass2 etc.).</p>
 
 <!--more-->
 
 
-<p><img class="centered" src="/images/posts/2013/Codebrag.png">
+<p>{% img centered /images/posts/2013/Codebrag.png %}
 <strong>Hall of blame:</strong> Don&rsquo;t user CR for finding scape goats or guilty ones. Let&rsquo;s assume that there was a failure and you found a person who &ldquo;reviewed&rdquo; the &ldquo;bad code&rdquo; and blame him for not pointing it out. I will cause that development in your company will drastically slow down. People will be pointing out every semicolon not at the right place, because they will be afraid of being scape goat. Your team members will start feeling unconfident and the lack of trust.</p>
 
-<p><img class="centered" src="/images/posts/2013/duty.jpg">
+<p>{% img centered /images/posts/2013/duty.jpg %}
 <strong>&ldquo;Code&rdquo; of duty:</strong> Don&rsquo;t push on your developers to much. If you force them to make review every day for an hour, soon they will hate it and treat as unfunny duty. Code review is about learning, praising others and giving feedback so it&rsquo;s very social activity. CR could be fun, don&rsquo;t spoil it.</p>
 
-<p><img class="centered" src="/images/posts/2013/wolfs.jpg">
+<p>{% img centered /images/posts/2013/wolfs.jpg %}
 <strong>I&rsquo;m not my code:</strong> If your code was reviewed by someone and he left some comment (sometimes even not too nice), don&rsquo;t get angry. He isn&rsquo;t saying that you are a poor developer. That wasn&rsquo;t his intention nor code review is about that. All he did, was criticizing some piece of code (not the author). Code review is all about code, not about you. Don&rsquo;t treat code review tool as forum with &ldquo;trolls&rdquo; and people fighting each other. When you will be writing comments try not to be rude or too strict. Try to imagine that your are on the other side reading it.</p>
 
 <p>To sum it up, there is plenty of ways to make code review wrong. Those 4 are the one that I experienced or anticipated, so beware. I promise to write post about &ldquo;what code review is about&rdquo;.</p>
