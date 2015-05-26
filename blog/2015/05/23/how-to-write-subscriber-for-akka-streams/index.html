@@ -7,7 +7,7 @@
 
 	<meta name="author" content="Łukasz Żuchowski"> 
 	
-	<meta name="description" content="Recently I started using akka-http and what I was trying to achive was to receive data from request, send response that the data were recieved &hellip;"> <meta name="keywords" content="">
+	<meta name="description" content="Recently I started using akka-http and what I was trying to achieve was to receive data from request, send response that the data were recieved &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -46,7 +46,7 @@
 
 	<div id="content" class="inner"><article class="post">
 	<h2 class="title">How to write subscriber for akka-streams?</h2>
-	<div class="entry-content"><p>Recently I started using <em>akka-http</em> and what I was trying to achive was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
+	<div class="entry-content"><p>Recently I started using <em>akka-http</em> and what I was trying to achieve was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
 
 <figure class='code'><figcaption><span>SimpleService</span><a href='https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -74,12 +74,12 @@
 <span class='line-number'>24</span>
 <span class='line-number'>25</span>
 <span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>    <span class="k">trait</span> <span class="nc">SimpleService</span> <span class="o">{</span>
-</span><span class='line'>  
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">trait</span> <span class="nc">SimpleService</span> <span class="o">{</span>
+</span><span class='line'>
 </span><span class='line'>    <span class="k">implicit</span> <span class="k">val</span> <span class="n">system</span><span class="k">:</span> <span class="kt">ActorSystem</span>
 </span><span class='line'>    <span class="k">implicit</span> <span class="k">def</span> <span class="n">executor</span><span class="k">:</span> <span class="kt">ExecutionContextExecutor</span>
 </span><span class='line'>    <span class="k">implicit</span> <span class="k">val</span> <span class="n">materializer</span><span class="k">:</span> <span class="kt">FlowMaterializer</span>
-</span><span class='line'>  
+</span><span class='line'>
 </span><span class='line'>    <span class="k">val</span> <span class="n">routes</span> <span class="k">=</span> <span class="o">{</span>
 </span><span class='line'>      <span class="n">path</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">)</span> <span class="o">{</span>
 </span><span class='line'>        <span class="n">get</span> <span class="o">{</span>
@@ -123,17 +123,23 @@
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>    <span class="n">path</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">get</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">complete</span><span class="o">(</span><span class="s">&quot;Hello World!&quot;</span><span class="o">)</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">val</span> <span class="n">routes</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">path</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">get</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">complete</span><span class="o">(</span><span class="s">&quot;Hello World!&quot;</span><span class="o">)</span>
 </span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>  <span class="n">path</span><span class="o">(</span><span class="s">&quot;data&quot;</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="o">(</span><span class="n">post</span> <span class="o">&amp;</span> <span class="n">entity</span><span class="o">(</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">&amp;</span> <span class="n">parameter</span><span class="o">(</span><span class="-Symbol">&#39;sender</span><span class="o">.</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">]))</span> <span class="o">{</span>
-</span><span class='line'>      <span class="o">(</span><span class="n">dataAsString</span><span class="o">,</span> <span class="n">sender</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span>
-</span><span class='line'>        <span class="n">complete</span> <span class="o">{</span>
-</span><span class='line'>          <span class="nc">HttpResponse</span><span class="o">(</span><span class="nc">StatusCodes</span><span class="o">.</span><span class="nc">OK</span><span class="o">,</span> <span class="n">entity</span> <span class="k">=</span> <span class="s">&quot;Data received&quot;</span><span class="o">)</span>
-</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="n">path</span><span class="o">(</span><span class="s">&quot;data&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="o">(</span><span class="n">post</span> <span class="o">&amp;</span> <span class="n">entity</span><span class="o">(</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">&amp;</span> <span class="n">parameter</span><span class="o">(</span><span class="-Symbol">&#39;sender</span><span class="o">.</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">]))</span> <span class="o">{</span>
+</span><span class='line'>        <span class="o">(</span><span class="n">dataAsString</span><span class="o">,</span> <span class="n">sender</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span>
+</span><span class='line'>          <span class="n">complete</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">dataPublisherRef</span> <span class="o">!</span> <span class="nc">Data</span><span class="o">(</span><span class="n">sender</span><span class="o">,</span> <span class="n">dataAsString</span><span class="o">)</span>
+</span><span class='line'>            <span class="nc">HttpResponse</span><span class="o">(</span><span class="nc">StatusCodes</span><span class="o">.</span><span class="nc">OK</span><span class="o">,</span> <span class="n">entity</span> <span class="k">=</span> <span class="s">&quot;Data received&quot;</span><span class="o">)</span>
+</span><span class='line'>          <span class="o">}</span>
+</span><span class='line'>      <span class="o">}</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>  <span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -165,7 +171,7 @@
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
 <span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>    <span class="k">case</span> <span class="k">class</span> <span class="nc">Data</span><span class="o">(</span><span class="n">sender</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">],</span> <span class="n">body</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="nc">Data</span><span class="o">(</span><span class="n">sender</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">],</span> <span class="n">body</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">DataPublisher</span> <span class="k">extends</span> <span class="nc">ActorPublisher</span><span class="o">[</span><span class="kt">Data</span><span class="o">]</span> <span class="o">{</span>
 </span><span class='line'>    <span class="k">var</span> <span class="n">queue</span><span class="k">:</span> <span class="kt">mutable.Queue</span><span class="o">[</span><span class="kt">Data</span><span class="o">]</span> <span class="k">=</span> <span class="n">mutable</span><span class="o">.</span><span class="nc">Queue</span><span class="o">()</span>
@@ -206,7 +212,7 @@ The last thing to implement is to define the processing flow:</p>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>    <span class="k">val</span> <span class="n">dataPublisherRef</span> <span class="k">=</span> <span class="n">system</span><span class="o">.</span><span class="n">actorOf</span><span class="o">(</span><span class="nc">Props</span><span class="o">[</span><span class="kt">DataPublisher</span><span class="o">])</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">val</span> <span class="n">dataPublisherRef</span> <span class="k">=</span> <span class="n">system</span><span class="o">.</span><span class="n">actorOf</span><span class="o">(</span><span class="nc">Props</span><span class="o">[</span><span class="kt">DataPublisher</span><span class="o">])</span>
 </span><span class='line'>  <span class="k">val</span> <span class="n">dataPublisher</span> <span class="k">=</span> <span class="nc">ActorPublisher</span><span class="o">[</span><span class="kt">Data</span><span class="o">](</span><span class="n">dataPublisher</span><span class="o">)</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="nc">Source</span><span class="o">(</span><span class="n">dataPublisher</span><span class="o">)</span>
@@ -229,7 +235,7 @@ and then publish the incoming data:</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>    <span class="n">path</span><span class="o">(</span><span class="s">&quot;data&quot;</span><span class="o">)</span> <span class="o">{</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="n">path</span><span class="o">(</span><span class="s">&quot;data&quot;</span><span class="o">)</span> <span class="o">{</span>
 </span><span class='line'>    <span class="o">(</span><span class="n">post</span> <span class="o">&amp;</span> <span class="n">entity</span><span class="o">(</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">&amp;</span> <span class="n">parameter</span><span class="o">(</span><span class="-Symbol">&#39;sender</span><span class="o">.</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">]))</span> <span class="o">{</span>
 </span><span class='line'>      <span class="o">(</span><span class="n">dataAsString</span><span class="o">,</span> <span class="n">sender</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span>
 </span><span class='line'>        <span class="n">complete</span> <span class="o">{</span>
@@ -263,7 +269,7 @@ and then publish the incoming data:</p>
 
 <div class="tags">
 
-	<a class='category' href='/blog/categories/conference/'>conference</a>
+	<a class='category' href='/blog/categories/akka/'>akka</a>, <a class='category' href='/blog/categories/akka-http/'>akka-http</a>, <a class='category' href='/blog/categories/akka-streams/'>akka-streams</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
 
 </div>
 

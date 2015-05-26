@@ -13,6 +13,10 @@
     <lastmod>2013-12-16T09:49:04+01:00</lastmod>
   </url>
   <url>
+    <loc>http://zuchos.github.io/blog/2013/10/03/code-review-is-not-about-dot-dot-dot/</loc>
+    <lastmod>2013-10-03T15:11:24+02:00</lastmod>
+  </url>
+  <url>
     <loc>http://zuchos.github.io/blog/</loc>
   </url>
   <url>
@@ -28,10 +32,22 @@
     <loc>http://zuchos.github.io/about-me/</loc>
   </url>
   <url>
+    <loc>http://zuchos.github.io/blog/categories/code-review/</loc>
+  </url>
+  <url>
     <loc>http://zuchos.github.io/blog/categories/agile/</loc>
   </url>
   <url>
+    <loc>http://zuchos.github.io/blog/categories/codebrag/</loc>
+  </url>
+  <url>
     <loc>http://zuchos.github.io/blog/categories/scrum/</loc>
+  </url>
+  <url>
+    <loc>http://zuchos.github.io/blog/categories/conference/</loc>
+  </url>
+  <url>
+    <loc>http://zuchos.github.io/blog/categories/confitura/</loc>
   </url>
   <url>
     <loc>http://zuchos.github.io/blog/categories/scala/</loc>
@@ -43,6 +59,6 @@
     <loc>http://zuchos.github.io/blog/categories/akka-http/</loc>
   </url>
   <url>
-    <loc>http://zuchos.github.io/blog/categories/conference/</loc>
+    <loc>http://zuchos.github.io/blog/categories/akka-streams/</loc>
   </url>
 </urlset>

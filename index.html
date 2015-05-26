@@ -7,7 +7,7 @@
 
 	<meta name="author" content="Łukasz Żuchowski"> 
 	
-	<meta name="description" content="Recently I started using akka-http and what I was trying to achive was to receive data from request, send response that the data were recieved &hellip;"> <meta name="keywords" content="">
+	<meta name="description" content="Recently I started using akka-http and what I was trying to achieve was to receive data from request, send response that the data were recieved &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -55,7 +55,7 @@
 			How to write subscriber for akka-streams?</a>
 	</h2>
 	<div class="entry-content">
-		<p>Recently I started using <em>akka-http</em> and what I was trying to achive was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
+		<p>Recently I started using <em>akka-http</em> and what I was trying to achieve was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
 
 <figure class='code'><figcaption><span>SimpleService</span><a href='https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -83,12 +83,12 @@
 <span class='line-number'>24</span>
 <span class='line-number'>25</span>
 <span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>    <span class="k">trait</span> <span class="nc">SimpleService</span> <span class="o">{</span>
-</span><span class='line'>  
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">trait</span> <span class="nc">SimpleService</span> <span class="o">{</span>
+</span><span class='line'>
 </span><span class='line'>    <span class="k">implicit</span> <span class="k">val</span> <span class="n">system</span><span class="k">:</span> <span class="kt">ActorSystem</span>
 </span><span class='line'>    <span class="k">implicit</span> <span class="k">def</span> <span class="n">executor</span><span class="k">:</span> <span class="kt">ExecutionContextExecutor</span>
 </span><span class='line'>    <span class="k">implicit</span> <span class="k">val</span> <span class="n">materializer</span><span class="k">:</span> <span class="kt">FlowMaterializer</span>
-</span><span class='line'>  
+</span><span class='line'>
 </span><span class='line'>    <span class="k">val</span> <span class="n">routes</span> <span class="k">=</span> <span class="o">{</span>
 </span><span class='line'>      <span class="n">path</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">)</span> <span class="o">{</span>
 </span><span class='line'>        <span class="n">get</span> <span class="o">{</span>
@@ -139,7 +139,7 @@
 
 <div class="tags">
 
-	<a class='category' href='/blog/categories/conference/'>conference</a>
+	<a class='category' href='/blog/categories/akka/'>akka</a>, <a class='category' href='/blog/categories/akka-http/'>akka-http</a>, <a class='category' href='/blog/categories/akka-streams/'>akka-streams</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
 
 </div>
 
@@ -183,7 +183,7 @@
 
 <div class="tags">
 
-	<a class='category' href='/blog/categories/akka/'>akka</a>, <a class='category' href='/blog/categories/akka-http/'>akka-http</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
+	<a class='category' href='/blog/categories/conference/'>conference</a>, <a class='category' href='/blog/categories/confitura/'>confitura</a>
 
 </div>
 
@@ -250,6 +250,56 @@
 <div class="tags">
 
 	<a class='category' href='/blog/categories/agile/'>agile</a>, <a class='category' href='/blog/categories/scrum/'>scrum</a>
+
+</div>
+
+
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/10/03/code-review-is-not-about-dot-dot-dot/">
+		
+			Code Review is not about...</a>
+	</h2>
+	<div class="entry-content">
+		<p>In SML we do code reviews. We do them on daily basis. Actually the point that we are now is a result of long journey that we made. We try different strategies and tools until we went to the place that we are now (but it doesn&rsquo;t mean that we are going to end up here).&lt;</p>
+
+<p>During this journey we found many risks and traps that are waiting for a newcomer. That&rsquo;s what this post is all about, traps &amp; misconceptions on code review.</p>
+
+<p><img class="centered" src="/images/posts/2013/puppet.jpg"></p>
+
+<p><strong>Code control:</strong> many organizations uses CR for controlling codebase. Most of them are using pre-commit strategy. In many cases its because those projects are open-source with hundred of commiters. In real life this is quite rare scenario, so if you hired someone it means that you trust him enough to let him commit code to repository. I know that in some organizations there will be temptation to make procedure that will force developers to &ldquo;review&rdquo; and &ldquo;approve&rdquo; every commit, but it will not guarantee the quality. Moreover people will soon treat code review as &ldquo;stupid&rdquo; corporate procedure and will try to hack-it (such changing password every month e.g. people are using passwords like: mypass1, mypass2 etc.).</p>
+
+
+		
+		<a href="/blog/2013/10/03/code-review-is-not-about-dot-dot-dot/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2013-10-03T15:11:24+02:00" pubdate data-updated="true">Oct 3rd, 2013</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/agile/'>agile</a>, <a class='category' href='/blog/categories/code-review/'>code review</a>, <a class='category' href='/blog/categories/codebrag/'>codebrag</a>
 
 </div>
 
