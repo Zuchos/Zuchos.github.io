@@ -4,7 +4,7 @@
   <title><![CDATA[Category: scala | Zuchos.com]]></title>
   <link href="http://zuchos.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://zuchos.github.io/"/>
-  <updated>2015-05-26T17:48:06+02:00</updated>
+  <updated>2015-05-27T09:24:57+02:00</updated>
   <id>http://zuchos.github.io/</id>
   <author>
     <name><![CDATA[Łukasz Żuchowski]]></name>
@@ -18,7 +18,7 @@
     <link href="http://zuchos.github.io/blog/2015/05/23/how-to-write-subscriber-for-akka-streams/"/>
     <updated>2015-05-23T00:05:10+02:00</updated>
     <id>http://zuchos.github.io/blog/2015/05/23/how-to-write-subscriber-for-akka-streams</id>
-    <content type="html"><![CDATA[<p>Recently I started using <em>akka-http</em> and what I was trying to achieve was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty <em>akka-http</em> service:</p>
+    <content type="html"><![CDATA[<p>Recently I started using <em>akka-http</em> and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then, process it asynchronously. I started with empty <em>akka-http</em> service:</p>
 
 <p>{% codeblock SimpleService lang:scala <a href="https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala">https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala</a> %}</p>
 
@@ -56,7 +56,7 @@ Http().bindAndHandle(routes, config.getString("http.host"), config.getInt("http.
 <!--more-->
 
 
-<p>Now we want to add new route that will accept data from sender. For this purpose we are going to add new route to the defined routes.</p>
+<p>Now we want to add new route that will accept data from sender. For this purpose we are going to add it to the routing definition.</p>
 
 <p>{% codeblock lang:scala routes <a href="https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala">https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala</a> %}
   val routes = {
@@ -64,7 +64,7 @@ Http().bindAndHandle(routes, config.getString("http.host"), config.getInt("http.
       get {
         complete(&ldquo;Hello World!&rdquo;)
       }
-    }
+    } ~
     path(&ldquo;data&rdquo;) {
       (post &amp; entity(as[String]) &amp; parameter(&lsquo;sender.as[String])) {
         (dataAsString, sender: String) =>
@@ -77,7 +77,7 @@ Http().bindAndHandle(routes, config.getString("http.host"), config.getInt("http.
   }
 {% endcodeblock %}</p>
 
-<p>What is now missing is the Publiser that will publish data that came from http request into the akka-stream. To do that we need to define <code>DataPublisher</code>. <code>DataPublisher</code> will be an implementation of <code>ActorPublisher</code> trait. It will be receiving data and then it will be publishing those to the next element in the flow.</p>
+<p>What is now missing is the Publisher that will publish data that came from http request into the akka-stream. To do that we need to define <code>DataPublisher</code>. It will be an implementation of <code>ActorPublisher</code> trait. It will be receiving data and then it will be publishing those to the next element in the flow.</p>
 
 <p>{% codeblock lang:scala DataPublisher <a href="https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/actors/FramePublisher.scala">https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/actors/FramePublisher.scala</a> %}
   case class Data(sender: Option[String], body: String)</p>
@@ -108,12 +108,12 @@ def publishIfNeeded() = {
   }
 {% endcodeblock %}</p>
 
-<p>As you may see, the main method is the receive method which is responsible for accepting the incoming data and responding on demand on data that is comming from subscribers.
-The last thing to implement is to define the processing flow:</p>
+<p>As you may see, the main method is <code>receive()</code> which is responsible for accepting the incoming data and responding on demand on data that is coming from subscribers.
+The last thing is to define the processing flow.</p>
 
 <p>{% codeblock lang:scala flow definition <a href="https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala">https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala</a> %}
   val dataPublisherRef = system.actorOf(Props[DataPublisher])
-  val dataPublisher = ActorPublisher<a href="dataPublisher">Data</a></p>
+  val dataPublisher = ActorPublisher<a href="dataPublisherRef">Data</a></p>
 
 <p>  Source(dataPublisher)
     .runForeach(
@@ -135,7 +135,7 @@ and then publish the incoming data:</p>
     }
 {% endcodeblock %}</p>
 
-<p>Now you application is ready to process data incoming data with akka-streams. You may find complete example on <a href="https://github.com/Zuchos/akka-http-with-steams">github</a></p>
+<p>Now your application is ready to process incoming data with akka-streams. You may find complete example on <a href="https://github.com/Zuchos/akka-http-with-steams">github</a></p>
 ]]></content>
   </entry>
   
