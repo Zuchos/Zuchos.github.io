@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "How to write subscriber for akka-streams?"
+title: "How to write a subscriber for akka-streams?"
 date: 2015-05-23 00:05:10 +0200
 comments: true
 categories: [scala, akka, akka-http, akka-streams]
 ---
-Recently I started using *akka-http* and what I was trying to achieve was to receive data from request, send response that the data were recieved succefully and then, process it asynchronsly. I started with empty *akka-http* service:
+Recently I started using *akka-http* and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then, process it asynchronously. I started with empty *akka-http* service:
 
 {% codeblock SimpleService lang:scala https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
 
