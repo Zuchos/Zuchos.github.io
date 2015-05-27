@@ -4,7 +4,7 @@
   <title><![CDATA[Category: akka-http | Zuchos.com]]></title>
   <link href="http://zuchos.github.io/blog/categories/akka-http/atom.xml" rel="self"/>
   <link href="http://zuchos.github.io/"/>
-  <updated>2015-05-27T09:36:31+02:00</updated>
+  <updated>2015-05-27T11:07:25+02:00</updated>
   <id>http://zuchos.github.io/</id>
   <author>
     <name><![CDATA[Łukasz Żuchowski]]></name>
@@ -18,7 +18,7 @@
     <link href="http://zuchos.github.io/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams/"/>
     <updated>2015-05-23T00:05:10+02:00</updated>
     <id>http://zuchos.github.io/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams</id>
-    <content type="html"><![CDATA[<p>Recently I started using <em>akka-http</em> and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then, process it asynchronously. I started with empty <em>akka-http</em> service:</p>
+    <content type="html"><![CDATA[<p>Recently I started using <em>akka-http</em> and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then process it asynchronously. I started with empty <em>akka-http</em> service:</p>
 
 <p><figure class='code'><figcaption><span>SimpleService <a href="https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala">https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala</a> </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -106,7 +106,6 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-<span class='line-number'>16</span>
 </pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">val</span> <span class="n">routes</span> <span class="k">=</span> <span class="o">{</span>
 </span><span class='line'>    <span class="n">path</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">hello</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;)</span> <span class="o">{</span>
 </span><span class='line'>      <span class="n">get</span> <span class="o">{</span>
@@ -117,7 +116,6 @@
 </span><span class='line'>      <span class="o">(</span><span class="n">post</span> <span class="o">&amp;</span><span class="n">amp</span><span class="o">;</span> <span class="n">entity</span><span class="o">(</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">&amp;</span><span class="n">amp</span><span class="o">;</span> <span class="n">parameter</span><span class="o">(&amp;</span><span class="n">lsquo</span><span class="o">;</span><span class="n">sender</span><span class="o">.</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">]))</span> <span class="o">{</span>
 </span><span class='line'>        <span class="o">(</span><span class="n">dataAsString</span><span class="o">,</span> <span class="n">sender</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span>
 </span><span class='line'>          <span class="n">complete</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">dataPublisherRef</span> <span class="o">!</span> <span class="nc">Data</span><span class="o">(</span><span class="n">sender</span><span class="o">,</span> <span class="n">dataAsString</span><span class="o">)</span>
 </span><span class='line'>            <span class="nc">HttpResponse</span><span class="o">(</span><span class="nc">StatusCodes</span><span class="o">.</span><span class="nc">OK</span><span class="o">,</span> <span class="n">entity</span> <span class="k">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="nc">Data</span> <span class="n">received</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;)</span>
 </span><span class='line'>          <span class="o">}</span>
 </span><span class='line'>      <span class="o">}</span>
