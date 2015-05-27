@@ -46,7 +46,7 @@ Now we want to add new route that will accept data from sender. For this purpose
       get {
         complete("Hello World!")
       }
-    }
+    } ~
     path("data") {
       (post & entity(as[String]) & parameter('sender.as[String])) {
         (dataAsString, sender: String) =>
@@ -93,7 +93,7 @@ The last thing is to define the processing flow.
 
 {% codeblock lang:scala flow definition https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
   val dataPublisherRef = system.actorOf(Props[DataPublisher])
-  val dataPublisher = ActorPublisher[Data](dataPublisher)
+  val dataPublisher = ActorPublisher[Data](dataPublisherRef)
 
   Source(dataPublisher)
     .runForeach(
