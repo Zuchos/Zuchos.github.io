@@ -4,7 +4,7 @@
   <title><![CDATA[Zuchos.com]]></title>
   <link href="http://zuchos.github.io/atom.xml" rel="self"/>
   <link href="http://zuchos.github.io/"/>
-  <updated>2015-05-27T09:24:10+02:00</updated>
+  <updated>2015-05-27T09:36:31+02:00</updated>
   <id>http://zuchos.github.io/</id>
   <author>
     <name><![CDATA[Łukasz Żuchowski]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[How to write subscriber for akka-streams?]]></title>
-    <link href="http://zuchos.github.io/blog/2015/05/23/how-to-write-subscriber-for-akka-streams/"/>
+    <title type="html"><![CDATA[How to write a subscriber for akka-streams?]]></title>
+    <link href="http://zuchos.github.io/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams/"/>
     <updated>2015-05-23T00:05:10+02:00</updated>
-    <id>http://zuchos.github.io/blog/2015/05/23/how-to-write-subscriber-for-akka-streams</id>
+    <id>http://zuchos.github.io/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams</id>
     <content type="html"><![CDATA[<p>Recently I started using <em>akka-http</em> and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then, process it asynchronously. I started with empty <em>akka-http</em> service:</p>
 
 <figure class='code'><figcaption><span>SimpleService</span><a href='https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
