@@ -69,7 +69,7 @@
 			How to write a subscriber for akka-streams?</a>
 	</h2>
 	<div class="entry-content">
-		<p>Recently I started using <em>akka-http</em> and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then process it asynchronously. I started with empty <em>akka-http</em> service:</p>
+		<p>Recently I started using <em>akka-http</em> and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then process it asynchronously. The other requirement was that the processing flow could be complicated in the future and some parts of it could be faster than other, so I decided to use <em>akka-streams</em> for that. I started with empty <em>akka-http</em> service:</p>
 
 <figure class='code'><figcaption><span>SimpleService</span><a href='https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
