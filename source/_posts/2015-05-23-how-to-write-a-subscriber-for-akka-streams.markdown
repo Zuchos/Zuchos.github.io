@@ -5,7 +5,7 @@ date: 2015-05-23 00:05:10 +0200
 comments: true
 categories: [scala, akka, akka-http, akka-streams]
 ---
-Recently I started using *akka-http* and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then process it asynchronously. I started with empty *akka-http* service:
+Recently I started using *akka-http* and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then process it asynchronously. The other requirement was that the processing flow could be complicated in the future and some parts of it could be faster than other, so I decided to use *akka-streams* for that. I started with empty *akka-http* service:
 
 {% codeblock SimpleService lang:scala https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
 
