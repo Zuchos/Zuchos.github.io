@@ -7,7 +7,7 @@ categories: [scala, akka, akka-http, akka-streams]
 ---
 Recently I started using *akka-http* and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then process it asynchronously. The other requirement was that the processing flow could be complicated in the future and some parts of it could be faster than other, so I decided to use *akka-streams* for that. I started with empty *akka-http* service:
 
-{% codeblock SimpleService lang:scala https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
+{% codeblock SimpleService lang:scala https://github.com/Zuchos/akka-http-with-streams/tree/blogpost1/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
 
   trait SimpleService {
 
@@ -40,7 +40,7 @@ Recently I started using *akka-http* and what I was trying to achieve was to rec
 <!--more-->
 Now we want to add new route that will accept data from sender. For this purpose we are going to add it to the routing definition.
 
-{% codeblock lang:scala routes https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
+{% codeblock lang:scala routes https://github.com/Zuchos/akka-http-with-streams/tree/blogpost1/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
   val routes = {
     path("hello") {
       get {
@@ -60,7 +60,7 @@ Now we want to add new route that will accept data from sender. For this purpose
 
 What is now missing is the Publisher that will publish data that came from http request into the akka-stream. To do that we need to define ```DataPublisher```. It will be an implementation of ```ActorPublisher``` trait. It will be receiving data and then it will be publishing those to the next element in the flow.
 
-{% codeblock lang:scala DataPublisher https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/actors/FramePublisher.scala %}
+{% codeblock lang:scala DataPublisher https://github.com/Zuchos/akka-http-with-streams/tree/blogpost1/src/main/scala/pl/zuchos/example/actors/FramePublisher.scala %}
   case class Data(sender: Option[String], body: String)
 
   class DataPublisher extends ActorPublisher[Data] {
@@ -90,7 +90,7 @@ What is now missing is the Publisher that will publish data that came from http 
 As you may see, the main method is ```receive()``` which is responsible for accepting the incoming data and responding on demand on data that is coming from subscribers.
 The last thing is to define the processing flow.
 
-{% codeblock lang:scala flow definition https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
+{% codeblock lang:scala flow definition https://github.com/Zuchos/akka-http-with-streams/tree/blogpost1/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
   val dataPublisherRef = system.actorOf(Props[DataPublisher])
   val dataPublisher = ActorPublisher[Data](dataPublisherRef)
 
@@ -103,12 +103,12 @@ The last thing is to define the processing flow.
 {% endcodeblock %}	  
 and then publish the incoming data:
 
-{% codeblock lang:scala publishing https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
+{% codeblock lang:scala publishing https://github.com/Zuchos/akka-http-with-streams/tree/blogpost1/src/main/scala/pl/zuchos/example/NaiveGsServer.scala %}
   path("data") {
     (post & entity(as[String]) & parameter('sender.as[String])) {
   	(dataAsString, sender: String) =>
         complete {
-          dataPublisherRef ! Data(sender, dataAsString)
+          dataPublisherRef ! Publish(Data(sender, dataAsString))
           HttpResponse(StatusCodes.OK, entity = "Data received")
         }
     }
