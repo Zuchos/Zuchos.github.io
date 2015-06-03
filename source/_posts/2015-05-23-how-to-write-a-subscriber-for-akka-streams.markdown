@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How to write a subscriber for akka-streams?"
+title: "How to write a publisher for akka-streams?"
 date: 2015-05-23 00:05:10 +0200
 comments: true
 categories: [scala, akka, akka-http, akka-streams]

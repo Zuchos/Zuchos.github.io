@@ -4,5 +4,7 @@ title: Blog Archives
 ---
 
 {% for post in site.posts reverse %}
-	{% include archive_post.html %}
+	{% if post.draft != true %}
+		{% include archive_post.html %}
+	{% endif %}
 {% endfor %}
