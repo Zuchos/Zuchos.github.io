@@ -4,7 +4,7 @@
   <title><![CDATA[Zuchos.com]]></title>
   <link href="http://zuchos.github.io/atom.xml" rel="self"/>
   <link href="http://zuchos.github.io/"/>
-  <updated>2015-05-28T09:02:20+02:00</updated>
+  <updated>2015-06-02T09:13:23+02:00</updated>
   <id>http://zuchos.github.io/</id>
   <author>
     <name><![CDATA[Łukasz Żuchowski]]></name>
@@ -13,14 +13,17 @@
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
+  
+  
+  
   <entry>
-    <title type="html"><![CDATA[How to write a subscriber for akka-streams?]]></title>
+    <title type="html"><![CDATA[How to write a publisher for akka-streams?]]></title>
     <link href="http://zuchos.github.io/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams/"/>
     <updated>2015-05-23T00:05:10+02:00</updated>
     <id>http://zuchos.github.io/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams</id>
     <content type="html"><![CDATA[<p>Recently I started using <em>akka-http</em> and what I was trying to achieve was to receive data from request, send response that the data were received successfully and then process it asynchronously. The other requirement was that the processing flow could be complicated in the future and some parts of it could be faster than other, so I decided to use <em>akka-streams</em> for that. I started with empty <em>akka-http</em> service:</p>
 
-<figure class='code'><figcaption><span>SimpleService</span><a href='https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>SimpleService</span><a href='https://github.com/Zuchos/akka-http-with-streams/tree/blogpost1/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -82,7 +85,7 @@
 
 <p>Now we want to add new route that will accept data from sender. For this purpose we are going to add it to the routing definition.</p>
 
-<figure class='code'><figcaption><span>routes</span><a href='https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>routes</span><a href='https://github.com/Zuchos/akka-http-with-streams/tree/blogpost1/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -117,7 +120,7 @@
 
 <p>What is now missing is the Publisher that will publish data that came from http request into the akka-stream. To do that we need to define <code>DataPublisher</code>. It will be an implementation of <code>ActorPublisher</code> trait. It will be receiving data and then it will be publishing those to the next element in the flow.</p>
 
-<figure class='code'><figcaption><span>DataPublisher</span><a href='https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/actors/FramePublisher.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>DataPublisher</span><a href='https://github.com/Zuchos/akka-http-with-streams/tree/blogpost1/src/main/scala/pl/zuchos/example/actors/FramePublisher.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -173,7 +176,7 @@
 <p>As you may see, the main method is <code>receive()</code> which is responsible for accepting the incoming data and responding on demand on data that is coming from subscribers.
 The last thing is to define the processing flow.</p>
 
-<figure class='code'><figcaption><span>flow definition</span><a href='https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>flow definition</span><a href='https://github.com/Zuchos/akka-http-with-streams/tree/blogpost1/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -197,7 +200,7 @@ The last thing is to define the processing flow.</p>
 <p> <br/>
 and then publish the incoming data:</p>
 
-<figure class='code'><figcaption><span>publishing</span><a href='https://github.com/Zuchos/akka-http-with-steams/blob/master/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>publishing</span><a href='https://github.com/Zuchos/akka-http-with-streams/tree/blogpost1/src/main/scala/pl/zuchos/example/NaiveGsServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -209,7 +212,7 @@ and then publish the incoming data:</p>
 </span><span class='line'>    <span class="o">(</span><span class="n">post</span> <span class="o">&amp;</span> <span class="n">entity</span><span class="o">(</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">&amp;</span> <span class="n">parameter</span><span class="o">(</span><span class="-Symbol">&#39;sender</span><span class="o">.</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">]))</span> <span class="o">{</span>
 </span><span class='line'>      <span class="o">(</span><span class="n">dataAsString</span><span class="o">,</span> <span class="n">sender</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span>
 </span><span class='line'>        <span class="n">complete</span> <span class="o">{</span>
-</span><span class='line'>          <span class="n">dataPublisherRef</span> <span class="o">!</span> <span class="nc">Data</span><span class="o">(</span><span class="n">sender</span><span class="o">,</span> <span class="n">dataAsString</span><span class="o">)</span>
+</span><span class='line'>          <span class="n">dataPublisherRef</span> <span class="o">!</span> <span class="nc">Publish</span><span class="o">(</span><span class="nc">Data</span><span class="o">(</span><span class="n">sender</span><span class="o">,</span> <span class="n">dataAsString</span><span class="o">))</span>
 </span><span class='line'>          <span class="nc">HttpResponse</span><span class="o">(</span><span class="nc">StatusCodes</span><span class="o">.</span><span class="nc">OK</span><span class="o">,</span> <span class="n">entity</span> <span class="k">=</span> <span class="s">&quot;Data received&quot;</span><span class="o">)</span>
 </span><span class='line'>        <span class="o">}</span>
 </span><span class='line'>    <span class="o">}</span>
@@ -219,6 +222,8 @@ and then publish the incoming data:</p>
 <p>Now your application is ready to process incoming data with akka-streams. You may find complete example on <a href="https://github.com/Zuchos/akka-http-with-steams">github</a></p>
 ]]></content>
   </entry>
+  
+  
   
   <entry>
     <title type="html"><![CDATA[Confitura 2014 - Developers family reunion]]></title>
@@ -237,6 +242,8 @@ and then publish the incoming data:</p>
 <p>Kudos for organizers and volunteers, job well done. That was great developers family reunion!</p>
 ]]></content>
   </entry>
+  
+  
   
   <entry>
     <title type="html"><![CDATA[What does Agile mean to you?]]></title>
@@ -305,6 +312,8 @@ and then publish the incoming data:</p>
 ]]></content>
   </entry>
   
+  
+  
   <entry>
     <title type="html"><![CDATA[Code Review is not about...]]></title>
     <link href="http://zuchos.github.io/blog/2013/10/03/code-review-is-not-about-dot-dot-dot/"/>
@@ -344,5 +353,6 @@ and then publish the incoming data:</p>
 
 ]]></content>
   </entry>
+  
   
 </feed>
