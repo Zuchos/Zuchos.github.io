@@ -4,7 +4,7 @@
   <title><![CDATA[Category: akka-http | Zuchos.com]]></title>
   <link href="http://zuchos.github.io/blog/categories/akka-http/atom.xml" rel="self"/>
   <link href="http://zuchos.github.io/"/>
-  <updated>2015-06-10T12:28:05+02:00</updated>
+  <updated>2015-06-10T14:39:28+02:00</updated>
   <id>http://zuchos.github.io/</id>
   <author>
     <name><![CDATA[Łukasz Żuchowski]]></name>
@@ -18,7 +18,7 @@
     <link href="http://zuchos.github.io/blog/2015/06/10/more-reactive-publisher-aka-publisher-vol-2/"/>
     <updated>2015-06-10T15:06:51+02:00</updated>
     <id>http://zuchos.github.io/blog/2015/06/10/more-reactive-publisher-aka-publisher-vol-2</id>
-    <content type="html"><![CDATA[<p>In my previous post I created <code>Publisher</code> for akka-streams that was buffering incoming data and then passing those down the stream. Johannes Rudolph aptly observed that the flow of that solution is the buffer overflow scenario (too many incoming requests may lead to out-of-memory issue).</p>
+    <content type="html"><![CDATA[<p>In my previous <a href="http://zuchos.com/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams/">post</a> I created <code>Publisher</code> for akka-streams that was buffering incoming data and then passing those down the stream. Johannes Rudolph aptly observed that the flow of that solution is the buffer overflow scenario (too many incoming requests may lead to out-of-memory issue).</p>
 
 <blockquote><p>Thanks for the post! It&rsquo;s nice to see that people are actually starting to use akka-stream and akka-http. A note: implementing <code>ActorPublisher</code> shouldn&rsquo;t be necessary in most cases. In this case you built an unbounded buffer in front of a stream which defeats akka-stream/reactive streams back pressure logic. Now if the consumer cannot keep up with reading the data all the unwritten data will start to pile up in memory. Generally, it isn&rsquo;t possible to switch from a pull-style (akka-stream/reactive-stream) model to a push-style model (actor message tell) somewhere in the processing chain. In cases where you still need to do this (e.g. because you are dealing with a &ldquo;live&rdquo; data source) there&rsquo;s a somewhat safer option: use <a href="https://github.com/akka/akka/blob/release-2.3-dev/akka-stream/src/main/scala/akka/stream/scaladsl/Source.scala#L342"><code>Source.actorRef</code></a> which lets you define a limited buffer and makes you choose a strategy what to do when the buffer is full. <cite><a href="https://twitter.com/virtualvoid">Johannes Rudolph</a></cite></p></blockquote>
 
@@ -339,6 +339,8 @@ and then publish the incoming data:</p>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now your application is ready to process incoming data with akka-streams. You may find complete example on <a href="https://github.com/Zuchos/akka-http-with-steams">github</a></p>
+
+<p>Update: I developed this example a bit in my <a href="http://zuchos.com/blog/2015/06/10/more-reactive-publisher-aka-publisher-vol-2/">next post</a></p>
 ]]></content>
   </entry>
   

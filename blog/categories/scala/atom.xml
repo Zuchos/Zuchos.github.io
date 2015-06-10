@@ -4,7 +4,7 @@
   <title><![CDATA[Category: scala | Zuchos.com]]></title>
   <link href="http://zuchos.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://zuchos.github.io/"/>
-  <updated>2015-06-10T12:28:05+02:00</updated>
+  <updated>2015-06-10T14:39:28+02:00</updated>
   <id>http://zuchos.github.io/</id>
   <author>
     <name><![CDATA[Łukasz Żuchowski]]></name>
@@ -225,6 +225,8 @@ and then publish the incoming data:</p>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now your application is ready to process incoming data with akka-streams. You may find complete example on <a href="https://github.com/Zuchos/akka-http-with-steams">github</a></p>
+
+<p>Update: I developed this example a bit in my <a href="http://zuchos.com/blog/2015/06/10/more-reactive-publisher-aka-publisher-vol-2/">next post</a></p>
 ]]></content>
   </entry>
   

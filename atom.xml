@@ -4,7 +4,7 @@
   <title><![CDATA[Zuchos.com]]></title>
   <link href="http://zuchos.github.io/atom.xml" rel="self"/>
   <link href="http://zuchos.github.io/"/>
-  <updated>2015-06-10T12:28:05+02:00</updated>
+  <updated>2015-06-10T14:39:28+02:00</updated>
   <id>http://zuchos.github.io/</id>
   <author>
     <name><![CDATA[Łukasz Żuchowski]]></name>
@@ -13,6 +13,104 @@
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
+  
+  <entry>
+    <title type="html"><![CDATA[More reactive Publisher (aka Publisher vol. 2)]]></title>
+    <link href="http://zuchos.github.io/blog/2015/06/10/more-reactive-publisher-aka-publisher-vol-2/"/>
+    <updated>2015-06-10T15:06:51+02:00</updated>
+    <id>http://zuchos.github.io/blog/2015/06/10/more-reactive-publisher-aka-publisher-vol-2</id>
+    <content type="html"><![CDATA[<p>In my previous <a href="http://zuchos.com/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams/">post</a> I created <code>Publisher</code> for akka-streams that was buffering incoming data and then passing those down the stream. Johannes Rudolph aptly observed that the flow of that solution is the buffer overflow scenario (too many incoming requests may lead to out-of-memory issue).</p>
+
+<blockquote><p>Thanks for the post! It&rsquo;s nice to see that people are actually starting to use akka-stream and akka-http. A note: implementing <code>ActorPublisher</code> shouldn&rsquo;t be necessary in most cases. In this case you built an unbounded buffer in front of a stream which defeats akka-stream/reactive streams back pressure logic. Now if the consumer cannot keep up with reading the data all the unwritten data will start to pile up in memory. Generally, it isn&rsquo;t possible to switch from a pull-style (akka-stream/reactive-stream) model to a push-style model (actor message tell) somewhere in the processing chain. In cases where you still need to do this (e.g. because you are dealing with a &ldquo;live&rdquo; data source) there&rsquo;s a somewhat safer option: use <a href="https://github.com/akka/akka/blob/release-2.3-dev/akka-stream/src/main/scala/akka/stream/scaladsl/Source.scala#L342"><code>Source.actorRef</code></a> which lets you define a limited buffer and makes you choose a strategy what to do when the buffer is full. <cite><a href="https://twitter.com/virtualvoid">Johannes Rudolph</a></cite></p></blockquote>
+
+<p>First I would like to explain my motivation, this case comes from my pet project. In that project I&rsquo;m expecting that users around the world will send me the data, so I want to make API as simple as possible (what could be simpler than REST API?).
+Users are not interested in the result of computation, they are interested in contributing the data. So the system should accept as many data as possible (return status 202 - Accepted to the user - it would mean that we received the data) and then process it with it&rsquo;s own speed. I rather expect to have many request from different user, than one user will be sending tons of those.
+The buffer overflow is possible situation here so Johannes was right that it should be tackled. First I took a look on proposed solution <code>Source.actorRef()</code>. The problem with <code>ActorRefSourceActor</code> is that the all available <code>OverflowStrategy</code> values are not notifying sender that the problem occurred and that leads to lost of data. So I couldn&rsquo;t use that solution.</p>
+
+<p>So I came up with different one, I added bufferSize <code>val</code> to <code>DataPublisher</code> and in receive method I extracted <code>cacheIfPossible()</code> method:</p>
+
+<figure class='code'><figcaption><span>DataPublisher</span><a href='https://github.com/Zuchos/akka-http-with-streams/blob/blogpost2/src/main/scala/pl/zuchos/example/actors/DataPublisher.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">receive</span><span class="k">:</span> <span class="kt">Actor.Receive</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nc">Publish</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="k">=&gt;</span>
+</span><span class='line'>      <span class="n">cacheIfPossible</span><span class="o">(</span><span class="n">s</span><span class="o">)</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nc">Request</span><span class="o">(</span><span class="n">cnt</span><span class="o">)</span> <span class="k">=&gt;</span>
+</span><span class='line'>      <span class="n">publishIfNeeded</span><span class="o">()</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nc">Cancel</span> <span class="k">=&gt;</span> <span class="n">context</span><span class="o">.</span><span class="n">stop</span><span class="o">(</span><span class="n">self</span><span class="o">)</span>
+</span><span class='line'>    <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">private</span> <span class="k">def</span> <span class="n">cacheIfPossible</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">Data</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="n">length</span> <span class="o">==</span> <span class="n">bufferSize</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">sender</span><span class="o">()</span> <span class="o">!</span> <span class="nc">Failure</span><span class="o">(</span><span class="k">new</span> <span class="nc">BufferOverflow</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">queue</span><span class="o">.</span><span class="n">enqueue</span><span class="o">(</span><span class="n">s</span><span class="o">)</span>
+</span><span class='line'>      <span class="n">sender</span><span class="o">()</span> <span class="o">!</span> <span class="nc">Success</span><span class="o">()</span>
+</span><span class='line'>      <span class="n">publishIfNeeded</span><span class="o">()</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!--more-->
+
+
+<p>So the main change here is that we are testing buffer size, if the buffer is full we respond with <code>Failure</code> to the Sender else we are adding data to the buffer and sending back <code>Success</code>. In <code>SimpleService</code> we are <strong>asking</strong> instead of <strong>talking</strong> to actor and then map the answer (<code>Try</code>) to the correct <code>HttpResponse</code>.</p>
+
+<figure class='code'><figcaption><span>SimpleService</span><a href='https://github.com/Zuchos/akka-http-with-streams/blob/blogpost2/src/main/scala/pl/zuchos/example/NaiveServer.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>      <span class="n">path</span><span class="o">(</span><span class="s">&quot;data&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="o">(</span><span class="n">post</span> <span class="o">&amp;</span> <span class="n">entity</span><span class="o">(</span><span class="n">as</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">&amp;</span> <span class="n">parameter</span><span class="o">(</span><span class="-Symbol">&#39;sender</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>          <span class="o">(</span><span class="n">dataAsString</span><span class="o">,</span> <span class="n">sender</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span>
+</span><span class='line'>            <span class="n">complete</span> <span class="o">{</span>
+</span><span class='line'>              <span class="k">val</span> <span class="n">publisherResponse</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span> <span class="n">dataPublisherRef</span> <span class="o">?</span> <span class="nc">Publish</span><span class="o">(</span><span class="nc">Data</span><span class="o">(</span><span class="n">sender</span><span class="o">,</span> <span class="n">dataAsString</span><span class="o">))</span>
+</span><span class='line'>              <span class="n">publisherResponse</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span>
+</span><span class='line'>                <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">HttpResponse</span><span class="o">(</span><span class="nc">StatusCodes</span><span class="o">.</span><span class="nc">OK</span><span class="o">,</span> <span class="n">entity</span> <span class="k">=</span> <span class="s">&quot;Data received&quot;</span><span class="o">)</span>
+</span><span class='line'>                <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="k">_:</span> <span class="kt">BufferOverflow</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">HttpResponse</span><span class="o">(</span><span class="nc">StatusCodes</span><span class="o">.</span><span class="nc">ServiceUnavailable</span><span class="o">,</span> <span class="n">entity</span> <span class="k">=</span> <span class="s">&quot;Try again later...&quot;</span><span class="o">)</span>
+</span><span class='line'>                <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span>
+</span><span class='line'>                  <span class="nc">HttpResponse</span><span class="o">(</span><span class="nc">StatusCodes</span><span class="o">.</span><span class="nc">InternalServerError</span><span class="o">,</span> <span class="n">entity</span> <span class="k">=</span> <span class="s">&quot;Something gone terribly wrong...&quot;</span><span class="o">)</span>
+</span><span class='line'>              <span class="o">}</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That solution is better than the previous one and for my case it fits better than using <code>Source.actorRef</code>. It&rsquo;s also not fully reactive (we don&rsquo;t forward back pressure to the client). Besides that we trust that the declared buffer will fit in memory, which is not too smart for the production. I tried to use <a href="https://github.com/akka/akka/blob/release-2.3-dev/akka-stream/src/main/scala/akka/stream/impl/FixedSizeBuffer.scala"><code>FixedSizeBuffer.scala</code></a> but it&rsquo;s a private class.</p>
+
+<p>Besides those cons my solution still exposes simple REST API and process data asynchronously. You may use <strong>akka-streams</strong> advantage to define compliated processing graph easily.</p>
+
+<p>This time I wrote better <a href="https://github.com/Zuchos/akka-http-with-streams/blob/blogpost2/src/test/scala/pl/zuchos/example/SimpleServiceSpec.scala">tests</a> and added notion of DI. Now we don&rsquo;t need to define data processing definition inside the SimpleService, we may pass it along. It makes <code>SimpleService</code> more simple and generic, if that would be parametrized with generic type (as well as <code>DataPublisher</code> actor) it might be used for different kinds of incoming data. I learned about one more thing during writing tests: <em>initial demand</em>. Even when buffer was set to 2 elements (and the <a href="https://github.com/Zuchos/akka-http-with-streams/blob/blogpost2/src/test/scala/pl/zuchos/example/LazyDataSubscriber.scala"><code>LazyDataSubscriber</code></a> wasn&rsquo;t demanding anything), I needed to send at least one more request to overflow the buffer. That&rsquo;s because of the initial demand (which was draining buffer). The initial demand is defined at <code>Sink</code> level: <code>Sink(dataSubscriber).withAttributes(OperationAttributes.inputBuffer(1, 1))</code>.</p>
+]]></content>
+  </entry>
   
   
   
@@ -220,6 +318,8 @@ and then publish the incoming data:</p>
 
 
 <p>Now your application is ready to process incoming data with akka-streams. You may find complete example on <a href="https://github.com/Zuchos/akka-http-with-steams">github</a></p>
+
+<p>Update: I developed this example a bit in my <a href="http://zuchos.com/blog/2015/06/10/more-reactive-publisher-aka-publisher-vol-2/">next post</a></p>
 ]]></content>
   </entry>
   

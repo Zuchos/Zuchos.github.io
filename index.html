@@ -7,7 +7,7 @@
 
 	<meta name="author" content="Łukasz Żuchowski"> 
 	
-	<meta name="description" content="Recently I started using akka-http and what I was trying to achieve was to receive data from request, send response that the data were received &hellip;"> <meta name="keywords" content="">
+	<meta name="description" content="In my previous post I created Publisher for akka-streams that was buffering incoming data and then passing those down the stream. Johannes Rudolph &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -60,6 +60,99 @@
 
 	<div id="content" class="inner">
 
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/06/10/more-reactive-publisher-aka-publisher-vol-2/">
+		
+			More reactive Publisher (aka Publisher vol. 2)</a>
+	</h2>
+	<div class="entry-content">
+		<p>In my previous <a href="http://zuchos.com/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams/">post</a> I created <code>Publisher</code> for akka-streams that was buffering incoming data and then passing those down the stream. Johannes Rudolph aptly observed that the flow of that solution is the buffer overflow scenario (too many incoming requests may lead to out-of-memory issue).</p>
+
+<blockquote><p>Thanks for the post! It&rsquo;s nice to see that people are actually starting to use akka-stream and akka-http. A note: implementing <code>ActorPublisher</code> shouldn&rsquo;t be necessary in most cases. In this case you built an unbounded buffer in front of a stream which defeats akka-stream/reactive streams back pressure logic. Now if the consumer cannot keep up with reading the data all the unwritten data will start to pile up in memory. Generally, it isn&rsquo;t possible to switch from a pull-style (akka-stream/reactive-stream) model to a push-style model (actor message tell) somewhere in the processing chain. In cases where you still need to do this (e.g. because you are dealing with a &ldquo;live&rdquo; data source) there&rsquo;s a somewhat safer option: use <a href="https://github.com/akka/akka/blob/release-2.3-dev/akka-stream/src/main/scala/akka/stream/scaladsl/Source.scala#L342"><code>Source.actorRef</code></a> which lets you define a limited buffer and makes you choose a strategy what to do when the buffer is full. <cite><a href="https://twitter.com/virtualvoid">Johannes Rudolph</a></cite></p></blockquote>
+
+<p>First I would like to explain my motivation, this case comes from my pet project. In that project I&rsquo;m expecting that users around the world will send me the data, so I want to make API as simple as possible (what could be simpler than REST API?).
+Users are not interested in the result of computation, they are interested in contributing the data. So the system should accept as many data as possible (return status 202 - Accepted to the user - it would mean that we received the data) and then process it with it&rsquo;s own speed. I rather expect to have many request from different user, than one user will be sending tons of those.
+The buffer overflow is possible situation here so Johannes was right that it should be tackled. First I took a look on proposed solution <code>Source.actorRef()</code>. The problem with <code>ActorRefSourceActor</code> is that the all available <code>OverflowStrategy</code> values are not notifying sender that the problem occurred and that leads to lost of data. So I couldn&rsquo;t use that solution.</p>
+
+<p>So I came up with different one, I added bufferSize <code>val</code> to <code>DataPublisher</code> and in receive method I extracted <code>cacheIfPossible()</code> method:</p>
+
+<figure class='code'><figcaption><span>DataPublisher</span><a href='https://github.com/Zuchos/akka-http-with-streams/blob/blogpost2/src/main/scala/pl/zuchos/example/actors/DataPublisher.scala'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">receive</span><span class="k">:</span> <span class="kt">Actor.Receive</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nc">Publish</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="k">=&gt;</span>
+</span><span class='line'>      <span class="n">cacheIfPossible</span><span class="o">(</span><span class="n">s</span><span class="o">)</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nc">Request</span><span class="o">(</span><span class="n">cnt</span><span class="o">)</span> <span class="k">=&gt;</span>
+</span><span class='line'>      <span class="n">publishIfNeeded</span><span class="o">()</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nc">Cancel</span> <span class="k">=&gt;</span> <span class="n">context</span><span class="o">.</span><span class="n">stop</span><span class="o">(</span><span class="n">self</span><span class="o">)</span>
+</span><span class='line'>    <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">private</span> <span class="k">def</span> <span class="n">cacheIfPossible</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">Data</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="n">length</span> <span class="o">==</span> <span class="n">bufferSize</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">sender</span><span class="o">()</span> <span class="o">!</span> <span class="nc">Failure</span><span class="o">(</span><span class="k">new</span> <span class="nc">BufferOverflow</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">queue</span><span class="o">.</span><span class="n">enqueue</span><span class="o">(</span><span class="n">s</span><span class="o">)</span>
+</span><span class='line'>      <span class="n">sender</span><span class="o">()</span> <span class="o">!</span> <span class="nc">Success</span><span class="o">()</span>
+</span><span class='line'>      <span class="n">publishIfNeeded</span><span class="o">()</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+
+		
+		<a href="/blog/2015/06/10/more-reactive-publisher-aka-publisher-vol-2/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2015-06-10T15:06:51+02:00" pubdate data-updated="true">Jun 10th, 2015</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/akka/'>akka</a>, <a class='category' href='/blog/categories/akka-http/'>akka-http</a>, <a class='category' href='/blog/categories/akka-streams/'>akka-streams</a>
+
+</div>
+
+
+</div>
+</article>
 
 
 
