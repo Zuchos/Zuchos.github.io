@@ -115,3 +115,5 @@ and then publish the incoming data:
 {% endcodeblock %}
   
 Now your application is ready to process incoming data with akka-streams. You may find complete example on [github](https://github.com/Zuchos/akka-http-with-steams)
+
+Update: I developed this example a bit in my [next post](http://zuchos.com/blog/2015/06/10/more-reactive-publisher-aka-publisher-vol-2/)

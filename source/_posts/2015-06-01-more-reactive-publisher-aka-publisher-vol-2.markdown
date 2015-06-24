@@ -5,11 +5,10 @@ date: 2015-06-10 15:06:51 +0200
 comments: true
 published: true
 categories: [akka, akka-http, akka-streams]
-draft: true
 
 ---
 
-In my previous post I created ```Publisher``` for akka-streams that was buffering incoming data and then passing those down the stream. Johannes Rudolph aptly observed that the flow of that solution is the buffer overflow scenario (too many incoming requests may lead to out-of-memory issue).
+In my previous [post](http://zuchos.com/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams/) I created ```Publisher``` for akka-streams that was buffering incoming data and then passing those down the stream. Johannes Rudolph aptly observed that the flow of that solution is the buffer overflow scenario (too many incoming requests may lead to out-of-memory issue).
 
 >Thanks for the post! It's nice to see that people are actually starting to use akka-stream and akka-http. A note: implementing `ActorPublisher` shouldn't be necessary in most cases. In this case you built an unbounded buffer in front of a stream which defeats akka-stream/reactive streams back pressure logic. Now if the consumer cannot keep up with reading the data all the unwritten data will start to pile up in memory. Generally, it isn't possible to switch from a pull-style (akka-stream/reactive-stream) model to a push-style model (actor message tell) somewhere in the processing chain. In cases where you still need to do this (e.g. because you are dealing with a "live" data source) there's a somewhat safer option: use [`Source.actorRef`](https://github.com/akka/akka/blob/release-2.3-dev/akka-stream/src/main/scala/akka/stream/scaladsl/Source.scala#L342) which lets you define a limited buffer and makes you choose a strategy what to do when the buffer is full. <cite>[Johannes Rudolph](https://twitter.com/virtualvoid)</cite>
 
